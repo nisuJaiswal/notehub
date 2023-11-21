@@ -5,6 +5,8 @@ import { usePathname } from "next/navigation";
 import React, { ElementRef, useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
 import UserItem from "./UserItem";
+import { useQuery } from "convex/react";
+import { api } from "@convex/_generated/api";
 
 const Navigation = () => {
   const pathname = usePathname();
@@ -16,6 +18,7 @@ const Navigation = () => {
   const [isResetting, setIsResetting] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(isMobile);
 
+  const documents = useQuery(api.documents.get);
   const handleMouseDown = (
     e: React.MouseEvent<HTMLDivElement, globalThis.MouseEvent>
   ) => {
@@ -114,7 +117,9 @@ const Navigation = () => {
           <UserItem />
         </div>
         <div className="mt-4">
-          <p>Documents</p>
+          {documents?.map((doc) => (
+            <p key={doc._id}>{doc.title}</p>
+          ))}
         </div>
         <div
           onClick={resetWidth}
