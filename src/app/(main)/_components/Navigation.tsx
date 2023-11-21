@@ -2,14 +2,9 @@
 import { cn } from "@/lib/utils";
 import { ChevronsLeft, MenuIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
-import React, {
-  ElementRef,
-  MouseEvent,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { ElementRef, useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
+import UserItem from "./UserItem";
 
 const Navigation = () => {
   const pathname = usePathname();
@@ -48,6 +43,7 @@ const Navigation = () => {
       navBar.current.style.setProperty("width", `calc(100% - ${newWidth}px)`);
     }
   };
+
   const handleMouseUp = () => {
     // console.log("Up");
 
@@ -70,6 +66,7 @@ const Navigation = () => {
       setTimeout(() => setIsResetting(false), 300);
     }
   };
+
   const collapse = () => {
     if (isSidebar.current && navBar.current) {
       setIsCollapsed(true);
@@ -91,6 +88,7 @@ const Navigation = () => {
   useEffect(() => {
     if (isMobile) collapse();
   }, [pathname, isMobile]);
+
   return (
     <>
       <aside
@@ -113,7 +111,7 @@ const Navigation = () => {
         </div>
 
         <div>
-          <p>Action Items</p>
+          <UserItem />
         </div>
         <div className="mt-4">
           <p>Documents</p>
