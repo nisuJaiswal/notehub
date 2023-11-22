@@ -38,7 +38,7 @@ const UserItem = () => {
         forceMount
         alignOffset={11}
       >
-        <div className="flex flex-col space-y-4">
+        <div className="flex flex-col space-y-4 p-4">
           <p className="text-xs text-muted-foreground font-medium leading-none">
             {user?.emailAddresses[0].emailAddress}
           </p>
@@ -58,7 +58,7 @@ const UserItem = () => {
 
         <DropdownMenuItem
           asChild
-          className="w-full text-muted-foreground cursor-pointer"
+          className="w-full text-muted-foreground cursor-pointer p-2"
         >
           <SignOutButton>Log Out</SignOutButton>
         </DropdownMenuItem>

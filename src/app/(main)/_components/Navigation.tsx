@@ -1,12 +1,20 @@
 "use client";
 import { cn } from "@/lib/utils";
-import { ChevronsLeft, MenuIcon } from "lucide-react";
+import {
+  ChevronsLeft,
+  MenuIcon,
+  PlusCircle,
+  Search,
+  Settings,
+} from "lucide-react";
 import { usePathname } from "next/navigation";
 import React, { ElementRef, useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
 import UserItem from "./UserItem";
-import { useQuery } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import { api } from "@convex/_generated/api";
+import Item from "./Item";
+import { toast } from "sonner";
 
 const Navigation = () => {
   const pathname = usePathname();
@@ -19,6 +27,8 @@ const Navigation = () => {
   const [isCollapsed, setIsCollapsed] = useState(isMobile);
 
   const documents = useQuery(api.documents.get);
+  const create = useMutation(api.documents.create);
+
   const handleMouseDown = (
     e: React.MouseEvent<HTMLDivElement, globalThis.MouseEvent>
   ) => {
@@ -92,6 +102,15 @@ const Navigation = () => {
     if (isMobile) collapse();
   }, [pathname, isMobile]);
 
+  const handleCreate = () => {
+    const promise = create({ title: "Test from Navigation" });
+
+    toast.promise(promise, {
+      loading: "Working on the Note...",
+      success: "Note Created Successfully",
+      error: "Error! No Note Created",
+    });
+  };
   return (
     <>
       <aside
@@ -115,6 +134,10 @@ const Navigation = () => {
 
         <div>
           <UserItem />
+          <Item label="Search" icon={Search} isSearch onClick={() => {}} />
+          <Item label="Settings" icon={Settings} onClick={() => {}} />
+
+          <Item onClick={handleCreate} label="New Page" icon={PlusCircle} />
         </div>
         <div className="mt-4">
           {documents?.map((doc) => (
