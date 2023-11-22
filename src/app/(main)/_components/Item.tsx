@@ -1,7 +1,12 @@
+import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
+import { api } from "@convex/_generated/api";
 import { Id } from "@convex/_generated/dataModel";
-import { ChevronDown, ChevronRight, LucideIcon } from "lucide-react";
+import { useMutation } from "convex/react";
+import { ChevronDown, ChevronRight, LucideIcon, Plus } from "lucide-react";
+import { useRouter } from "next/navigation";
 import React from "react";
+import { toast } from "sonner";
 
 interface ItemProps {
   id?: Id<"document">;
@@ -27,7 +32,33 @@ const Item = ({
   onClick,
   icon: Icon,
 }: ItemProps) => {
+  const router = useRouter();
+  const handeExpand = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    e.stopPropagation();
+    onExpand?.();
+  };
+
+  const create = useMutation(api.documents.create);
+
+  const onCreate = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    e.stopPropagation();
+    if (!id) return;
+
+    const promise = create({ title: "Untitled", parentDocument: id }).then(
+      (docId) => {
+        if (!expanded) onExpand?.();
+
+        // router.push(`/documents/${docId}`);
+      }
+    );
+    toast.promise(promise, {
+      loading: "Working on the Note...",
+      success: "Note Created Successfully",
+      error: "Error! No Note Created",
+    });
+  };
   const CheveronIcon = expanded ? ChevronDown : ChevronRight;
+
   return (
     <div
       onClick={onClick}
@@ -42,7 +73,7 @@ const Item = ({
         <div
           role="button"
           className="h-full rounded-sm hover:bg-neutral-300 dark:hover:bg-neutral-600 mr-1"
-          onClick={() => {}}
+          onClick={handeExpand}
         >
           <CheveronIcon className="h-full w-full shrink-0 text-muted-foreground/50" />
         </div>
@@ -61,8 +92,32 @@ const Item = ({
           <span className="text-xs">CTRL</span> K
         </kbd>
       )}
+
+      {!!id && (
+        <div className="ml-auto flex items-center">
+          <div
+            className="opacity-0 group-hover:opacity-100 ml-auto h-full p-2 rounded-sm hover:bg-neutral-300 dark:hover:bg-neutral-600"
+            role="button"
+            onClick={onCreate}
+          >
+            <Plus className="h-4 w-4 text-muted-foreground" />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
 export default Item;
+
+Item.Skeleton = function ItemSkeleton({ level }: { level?: number }) {
+  return (
+    <div
+      style={{ paddingLeft: level ? `${level * 12 + 25}px` : "12px" }}
+      className="gap-x-4 flex py-[3px]"
+    >
+      <Skeleton className="h-4 w-4" />
+      <Skeleton className="h-4 w-[30%]" />
+    </div>
+  );
+};
