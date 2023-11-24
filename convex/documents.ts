@@ -94,7 +94,7 @@ export const archive = mutation({
         }
 
         // Set archive field to true
-        const doucment = await ctx.db.patch(args.id, {
+        const document = await ctx.db.patch(args.id, {
             isArchived: true
         })
 
