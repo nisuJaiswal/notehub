@@ -122,7 +122,7 @@ const Item = ({
       )}
 
       {!!id && (
-        <div className="ml-auto flex items-center">
+        <div className="ml-auto flex items-center space-x-2">
           <DropdownMenu>
             <DropdownMenuTrigger
               asChild
