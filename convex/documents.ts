@@ -144,7 +144,7 @@ export const restore = mutation({
                 .withIndex('by_user_parent', q => (q.eq("userId", userId).eq("parentDocument", documentId))).collect()
 
             for (const child of children) {
-                await ctx.db.patch(child._id, {isArchived: false})
+                await ctx.db.patch(child._id, { isArchived: false })
                 await recursiveRestore(child._id)
             }
 
@@ -173,18 +173,32 @@ export const deleteNote = mutation({
     args: {
         documentId: v.id("document")
     },
-    handler: async(ctx,args) => {
+    handler: async (ctx, args) => {
         const identity = await ctx.auth.getUserIdentity()
-        if(!identity) throw new Error("Unauthorized User")
+        if (!identity) throw new Error("Unauthorized User")
         const userId = identity.subject
 
         const existingDoc = await ctx.db.get(args.documentId)
-        if(!existingDoc) throw new Error("Document not found")
+        if (!existingDoc) throw new Error("Document not found")
 
-        if(existingDoc.userId !== userId) throw new Error("Unauthorized Access to the Note")
+        if (existingDoc.userId !== userId) throw new Error("Unauthorized Access to the Note")
 
         const deleteNote = await ctx.db.delete(args.documentId)
 
         return deleteNote
+    }
+})
+
+
+export const getSearch = query({
+    handler: async (ctx) => {
+        const identity = await ctx.auth.getUserIdentity()
+        if (!identity) throw new Error("User not Authorized")
+        const userId = identity.subject
+
+        const documents = await ctx.db.query("document").withIndex("by_user", q => q.eq("userId", userId)).filter(q => q.eq(q.field('isArchived'), false)).order('desc').collect()
+
+
+        return documents
     }
 })
