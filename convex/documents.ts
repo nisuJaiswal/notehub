@@ -1,6 +1,6 @@
 import { v } from 'convex/values'
 import { mutation, query } from './_generated/server'
-import { Id } from './_generated/dataModel'
+import { Doc, Id } from './_generated/dataModel'
 
 // Function to crate a document
 export const create = mutation({
@@ -101,5 +101,90 @@ export const archive = mutation({
         recursiveArchive(args.id)
         return document
 
+    }
+})
+
+// Function for get the archived notes
+export const getArchived = query({
+    handler: async (ctx) => {
+        const identity = await ctx.auth.getUserIdentity()
+        if (!identity) throw new Error("Not Authenticated User")
+
+        const userId = identity.subject
+
+        const documents = await ctx.db.query('document')
+            .withIndex('by_user', q => q.eq("userId", userId))
+            .filter(q => q.eq(q.field('isArchived'), true))
+            .order('desc')
+            .collect()
+
+        return documents
+    }
+})
+
+// Function for restoring a note
+export const restore = mutation({
+    args: {
+        id: v.id('document')
+    },
+    handler: async (ctx, args) => {
+        const identity = await ctx.auth.getUserIdentity()
+        if (!identity) throw new Error("User not Authenticated")
+
+        const userId = identity.subject
+
+        const exisitingDoc = await ctx.db.get(args.id)
+        if (!exisitingDoc) throw Error("Note does not exist")
+
+        if (exisitingDoc.userId !== userId) throw new Error("Unauthorized User")
+
+
+        const recursiveRestore = async (documentId: Id<"document">) => {
+            const children = await ctx.db.query('document')
+                .withIndex('by_user_parent', q => (q.eq("userId", userId).eq("parentDocument", documentId))).collect()
+
+            for (const child of children) {
+                await ctx.db.patch(child._id, {isArchived: false})
+                await recursiveRestore(child._id)
+            }
+
+        }
+
+        const options: Partial<Doc<"document">> = {
+            isArchived: false
+        }
+
+
+        if (exisitingDoc.parentDocument) {
+            const parent = await ctx.db.get(exisitingDoc.parentDocument)
+            if (parent?.isArchived) {
+                options.parentDocument = undefined
+            }
+        }
+        const document = await ctx.db.patch(args.id, options)
+
+        recursiveRestore(args.id)
+        return document
+    }
+})
+
+// Function for Deleting a note
+export const deleteNote = mutation({
+    args: {
+        documentId: v.id("document")
+    },
+    handler: async(ctx,args) => {
+        const identity = await ctx.auth.getUserIdentity()
+        if(!identity) throw new Error("Unauthorized User")
+        const userId = identity.subject
+
+        const existingDoc = await ctx.db.get(args.documentId)
+        if(!existingDoc) throw new Error("Document not found")
+
+        if(existingDoc.userId !== userId) throw new Error("Unauthorized Access to the Note")
+
+        const deleteNote = await ctx.db.delete(args.documentId)
+
+        return deleteNote
     }
 })
