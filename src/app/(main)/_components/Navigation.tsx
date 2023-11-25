@@ -24,6 +24,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import TrashBox from "./TrashBox";
+import { useSearch } from "@/hooks/use-search";
+import { useSettings } from "@/hooks/use-settings";
 
 const Navigation = () => {
   const pathname = usePathname();
@@ -110,6 +112,9 @@ const Navigation = () => {
     if (isMobile) collapse();
   }, [pathname, isMobile]);
 
+  const search = useSearch();
+  const settings = useSettings();
+
   const handleCreate = () => {
     const promise = create({ title: "Test from Navigation" });
 
@@ -142,8 +147,13 @@ const Navigation = () => {
 
         <div>
           <UserItem />
-          <Item label="Search" icon={Search} isSearch onClick={() => {}} />
-          <Item label="Settings" icon={Settings} onClick={() => {}} />
+          <Item label="Search" icon={Search} isSearch onClick={search.onOpen} />
+          <Item
+            label="Settings"
+            icon={Settings}
+            isSetting
+            onClick={settings.onOpen}
+          />
 
           <Item onClick={handleCreate} label="New Page" icon={PlusCircle} />
         </div>

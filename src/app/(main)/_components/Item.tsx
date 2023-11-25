@@ -28,6 +28,7 @@ interface ItemProps {
   documentIcon?: string;
   active?: boolean;
   isSearch?: boolean;
+  isSetting?: boolean;
   expanded?: boolean;
   level?: number;
   onExpand?: () => void;
@@ -40,6 +41,7 @@ const Item = ({
   active,
   documentIcon,
   isSearch,
+  isSetting,
   level = 0,
   onExpand,
   expanded,
@@ -118,6 +120,12 @@ const Item = ({
       {isSearch && (
         <kbd className="ml-auto pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono font-medium text-muted-foreground opacity-100 text-[10px]">
           <span className="text-xs">CTRL</span> K
+        </kbd>
+      )}
+
+      {isSetting && (
+        <kbd className="ml-auto pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono font-medium text-muted-foreground opacity-100 text-[10px]">
+          <span className="text-xs">CTRL</span> ,
         </kbd>
       )}
 

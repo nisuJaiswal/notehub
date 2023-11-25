@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/providers/theme-provider";
 import { ConvexProvider } from "@/providers/convex-provider";
 import { Toaster } from "sonner";
+import { ModalProvider } from "@/providers/modal-provider";
 // import { ConvexClientProvider } from "@/providers/convex-provider";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -45,6 +46,7 @@ export default function RootLayout({
             storageKey="notehub"
           >
             <Toaster position="bottom-center"></Toaster>
+            <ModalProvider />
             {children}
           </ThemeProvider>
         </ConvexProvider>

@@ -14,6 +14,7 @@ import {
   CommandList,
 } from "./ui/command";
 import { File } from "lucide-react";
+import { useSettings } from "@/hooks/use-settings";
 
 const SearchCommand = () => {
   const router = useRouter();
@@ -21,6 +22,10 @@ const SearchCommand = () => {
   const documents = useQuery(api.documents.getSearch);
 
   const toggle = useSearch((store) => store.toggle);
+  const settingsToggle = useSettings((store) => {
+    const settingsToggle = store.toggle;
+    return settingsToggle;
+  });
   const isOpen = useSearch((store) => store.isOpen);
   const onClose = useSearch((store) => store.onClose);
 
@@ -33,10 +38,20 @@ const SearchCommand = () => {
         toggle();
       }
     };
+    const settingsDown = (e: KeyboardEvent) => {
+      if (e.key === "," && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        settingsToggle();
+      }
+    };
 
     document.addEventListener("keydown", down);
+    document.addEventListener("keydown", settingsDown);
 
-    return () => document.removeEventListener("keydown", down);
+    return () => {
+      document.removeEventListener("keydown", down);
+      document.removeEventListener("keydown", settingsDown);
+    };
   }, [toggle]);
 
   const onSelect = (id: string) => {
