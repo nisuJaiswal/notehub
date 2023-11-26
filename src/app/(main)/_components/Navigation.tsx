@@ -9,7 +9,7 @@ import {
   Settings,
   Trash,
 } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import React, { ElementRef, useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
 import UserItem from "./UserItem";
@@ -26,6 +26,7 @@ import {
 import TrashBox from "./TrashBox";
 import { useSearch } from "@/hooks/use-search";
 import { useSettings } from "@/hooks/use-settings";
+import Navbar from "./Navbar";
 
 const Navigation = () => {
   const pathname = usePathname();
@@ -36,6 +37,7 @@ const Navigation = () => {
   const navBar = useRef<ElementRef<"div">>(null);
   const [isResetting, setIsResetting] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(isMobile);
+  const params = useParams();
 
   const create = useMutation(api.documents.create);
 
@@ -77,7 +79,7 @@ const Navigation = () => {
 
   const resetWidth = () => {
     if (isSidebar.current && navBar.current) {
-      setIsCollapsed(true);
+      setIsCollapsed(false);
       setIsResetting(true);
 
       isSidebar.current.style.width = isMobile ? "100%" : "240px";
@@ -186,15 +188,19 @@ const Navigation = () => {
           isResetting && "transition-all duration-300 ease-in-out"
         )}
       >
-        <nav className="w-full bg-transparent px-3 py-2">
-          {isCollapsed && (
-            <MenuIcon
-              onClick={resetWidth}
-              className="h-6 w-6 text-muted-foreground"
-              role="button"
-            />
-          )}
-        </nav>
+        {!!params.documentId ? (
+          <Navbar isCollapsed={isCollapsed} onResetWidth={resetWidth} />
+        ) : (
+          <nav className="w-full bg-transparent px-3 py-2">
+            {isCollapsed && (
+              <MenuIcon
+                onClick={resetWidth}
+                className="h-6 w-6 text-muted-foreground"
+                role="button"
+              />
+            )}
+          </nav>
+        )}
       </div>
     </>
   );
