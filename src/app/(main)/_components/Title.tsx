@@ -31,14 +31,24 @@ const Title = ({ initialData }: Props) => {
   };
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
-    update({
-      id: initialData._id,
-      title: e.target.value || "Untitled",
-    });
+    // update({
+    //   id: initialData._id,
+    //   title: e.target.value || "Untitled",
+    // });
   };
-
-  const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") disableInput();
+  const onKeyDown = (
+    e: React.KeyboardEvent | React.ChangeEvent<HTMLInputElement>
+  ) => {
+    if ("key" in e && e.key === "Enter") {
+      update({
+        id: initialData._id,
+        title:
+          (e as React.KeyboardEvent<HTMLInputElement>).currentTarget.value ||
+          "Untitled",
+      });
+      disableInput();
+    }
+    if ("key" in e && e.key === "Escape") disableInput();
   };
   return (
     <div className="flex items-center gap-x-1">
