@@ -273,3 +273,27 @@ export const removeIcon = mutation({
         return document
     }
 })
+
+// Funtion to remove a Cover Image
+export const removeCoverImage = mutation({
+    args: {
+        id: v.id('document')
+    },
+    handler: async (ctx, args) => {
+        const identity = await ctx.auth.getUserIdentity()
+        if(!identity) throw new Error("User not Authenticated")
+        
+        const userId = identity.subject
+
+        const existingDoc = await ctx.db.get(args.id)
+        if(!existingDoc) throw new Error("Note Doesn't Exists")
+
+        if(existingDoc.userId !== userId) throw new Error("Unauthorized Access to a Note")
+
+        const document = ctx.db.patch(args.id, {
+            coverImage: undefined
+        })
+
+        return document
+    }
+})
