@@ -9,7 +9,7 @@ import {
   Settings,
   Trash,
 } from "lucide-react";
-import { useParams, usePathname } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import React, { ElementRef, useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
 import UserItem from "./UserItem";
@@ -38,7 +38,7 @@ const Navigation = () => {
   const [isResetting, setIsResetting] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(isMobile);
   const params = useParams();
-
+  const router = useRouter();
   const create = useMutation(api.documents.create);
 
   const handleMouseDown = (
@@ -118,7 +118,9 @@ const Navigation = () => {
   const settings = useSettings();
 
   const handleCreate = () => {
-    const promise = create({ title: "Test from Navigation" });
+    const promise = create({ title: "Untitled" }).then((documentId) => {
+      router.push(`/documents/${documentId}`);
+    });
 
     toast.promise(promise, {
       loading: "Working on the Note...",
