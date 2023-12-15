@@ -14,7 +14,7 @@ interface Props {
     documentId: Id<"document">;
   };
 }
-const page = ({ params }: Props) => {
+const Page = ({ params }: Props) => {
   const editor = useMemo(
     () => dynamic(() => import("@/components/Editor"), { ssr: false }),
     []
@@ -59,4 +59,4 @@ const page = ({ params }: Props) => {
   );
 };
 
-export default page;
+export default Page;
