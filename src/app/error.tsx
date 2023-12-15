@@ -20,7 +20,7 @@ const error = () => {
         alt={"Error"}
         height={300}
         width={300}
-        className="block1 dark:hidden"
+        className="block dark:hidden"
       />
       <h2 className="font-semibold text-3xl">Sorry! Something Went Wrong!</h2>
       <Button variant="outline" asChild>
