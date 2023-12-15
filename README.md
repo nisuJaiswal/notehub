@@ -15,6 +15,7 @@
 - Searching for the specific notes
 - Recycle Bin has been provided
 - Change the coverpage as well
+- Definately Totally Responsive Design
 
 ## Major Libraries
 
