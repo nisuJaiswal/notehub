@@ -24,7 +24,7 @@ const error = () => {
       />
       <h2 className="font-semibold text-3xl">Sorry! Something Went Wrong!</h2>
       <Button variant="outline" asChild>
-        <Link href="/documents"> Go Back</Link>
+        <Link href="/documents">Go Back</Link>
       </Button>
     </div>
   );
