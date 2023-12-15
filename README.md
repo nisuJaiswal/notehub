@@ -7,9 +7,8 @@
 ![img](/public/Notehub%201.PNG)
 ![img](/public/Notehub%201.1.PNG)
 ![img](/public/Notehub%203.PNG)
-![img](/public/Notehub%202.PNG)
+![img](/public/Notehub%202.png)
 ![img](/public/Notehub%204.PNG)
-![img](/public/Notehub%205.PNG)
 
 ## Features
 
