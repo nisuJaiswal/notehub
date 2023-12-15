@@ -25,7 +25,7 @@ const UserItem = () => {
               <AvatarImage src={user?.imageUrl} />
             </Avatar>
             <span className="text-start font-medium line-clamp-1">
-              {user?.firstName}'s NoteHub
+              {user?.firstName}&apos;s NoteHub
             </span>
           </div>
           <ChevronsLeftRightIcon className="rotate-90 text-muted-foreground ml-2 h-4 w-4" />
@@ -49,7 +49,9 @@ const UserItem = () => {
               </Avatar>
             </div>
             <div>
-              <p className="text-sm line-clamp-1">{user?.fullName}'s NoteHub</p>
+              <p className="text-sm line-clamp-1">
+                {user?.fullName}&apos;s NoteHub
+              </p>
             </div>
           </div>
         </div>

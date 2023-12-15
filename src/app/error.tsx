@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-const error = () => {
+const Error = () => {
   return (
     <div className="flex flex-col h-screen items-center justify-center space-y-4 w-full">
       <Image
@@ -30,4 +30,4 @@ const error = () => {
   );
 };
 
-export default error;
+export default Error;
