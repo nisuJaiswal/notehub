@@ -2,6 +2,15 @@
 
 - An Web application that allows you to make notes along with the images, background images and also with the various amount of stylings.
 
+# Screenshots
+
+![img](/public/Notehub%201.PNG)
+![img](/public/Notehub%201.1.PNG)
+![img](/public/Notehub%203.PNG)
+![img](/public/Notehub%202.PNG)
+![img](/public/Notehub%204.PNG)
+![img](/public/Notehub%205.PNG)
+
 ## Features
 
 - Login Using Email Verification as well as GitHub
